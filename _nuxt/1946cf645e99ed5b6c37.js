@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{189:function(t,n,e){"use strict";e.r(n);var r={middleware:"authInstituteAdmin"},d=e(9),component=Object(d.a)(r,function(){var t=this.$createElement;return(this._self._c||t)("div",[this._v("\n\tThis is dashboard page for institute admin.\n")])},[],!1,null,null,null);n.default=component.exports}}]);

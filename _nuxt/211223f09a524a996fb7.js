@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{188:function(e,n,t){"use strict";t.r(n);var r={middleware:"authSiteAdmin"},d=t(9),component=Object(d.a)(r,function(){var e=this.$createElement;return(this._self._c||e)("div",[this._v("\n\tThis is dashboard page for site admins.\n")])},[],!1,null,null,null);n.default=component.exports}}]);
