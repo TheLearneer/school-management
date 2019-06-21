@@ -1,5 +1,7 @@
 import bodyParser from 'body-parser'
 
+const router = process.env.DEPLOY_ENV === 'GH_PAGES' ? { base: '/school-management/' } : {};
+
 export default {
   mode: 'universal',
   head: {
@@ -25,6 +27,7 @@ export default {
     '@nuxtjs/pwa'
 	// ,'@nuxtjs/eslint-module'
   ],
+  router,
   auth: {
 	strategies: {
 	  local: {
