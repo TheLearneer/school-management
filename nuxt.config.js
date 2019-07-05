@@ -27,7 +27,7 @@ export default {
     '@nuxtjs/pwa'
 	// ,'@nuxtjs/eslint-module'
   ],
-  router,
+  // router,
   auth: {
 	strategies: {
 	  local: {
