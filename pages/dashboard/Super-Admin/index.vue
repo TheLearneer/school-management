@@ -1,17 +1,35 @@
 <template>
 	<div>
 		<div class="section">
-		<h1>Welcome {{ $auth.user.name }}</h1>
+		<hr>
+		<nuxt-link to="add" append>
+			Add new Institute
+		</nuxt-link>
+		<hr>
+		<h1 class="title is-2">Institutes Listed</h1>
 		<div class="box" v-for="ins of institutes" :key="ins.id">
 			<div class="columns">
-				<div class="column">{{ ins.name }}</div>
-				<div class="column is-1">delete</div>
+				<div class="column is-1">
+					<figure class="image is-64x64">
+						<img :src="ins.logo" />
+					</figure>
+				</div>
+				<div class="column">
+					{{ ins.name }}
+				</div>
+				<div class="column is-1">
+					<b-button type="is-danger" icon-left="delete" @click="deleteInstitute(ins.id)">
+						Delete
+					</b-button>
+				</div>
 			</div>
 		</div>
+		
+		<!--
 		<div class="tile is-ancestor">
   <div class="tile is-4 is-vertical is-parent">
     <div class="tile is-child box">
-      <p class="title">One</p>
+      <p class="title">First</p>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
     </div>
     <div class="tile is-child box">
@@ -28,6 +46,8 @@
     </div>
   </div>
 </div>
+-->
+
 </div>
 	</div>
 </template>
@@ -36,8 +56,14 @@
 export default {
 	middleware: 'authSiteAdmin',
 	async asyncData ({ $axios }) {
-		const data = await $axios.$get('/api/v1/institutes');
+		const data = await $axios.$get('/api/institutes');
 		return { institutes: data.institutes };
+	},
+	methods: {
+		async deleteInstitute(insId) {
+			const data = await this.$axios.$delete('/api/institutes', { data: { id: insId } });
+			this.institutes = data.newData.data;
+		}
 	}
 }
 </script>

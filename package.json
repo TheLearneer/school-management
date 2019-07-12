@@ -22,7 +22,7 @@
     "express-jwt": "^5.3.1",
     "jsonwebtoken": "^8.5.1",
     "nuxt": "^2.0.0",
-    "nuxt-buefy": "^0.3.2"
+    "nuxt-buefy": "^0.3.10"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
