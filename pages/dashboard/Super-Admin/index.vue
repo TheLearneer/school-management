@@ -9,6 +9,7 @@
 		<h1 class="title is-2">Institutes Listed</h1>
 		<div class="box" v-for="ins of institutes" :key="ins.id">
 			<div class="columns">
+				<!--
 				<div class="column is-1">
 					<figure class="image is-64x64">
 						<img :src="ins.logo" />
@@ -16,6 +17,10 @@
 				</div>
 				<div class="column">
 					{{ ins.name }}
+				</div>
+				-->
+				<div class="column">
+					{{ ins }}
 				</div>
 				<div class="column is-1">
 					<b-button type="is-danger" icon-left="delete" @click="deleteInstitute(ins.id)">
@@ -61,8 +66,8 @@ export default {
 	},
 	methods: {
 		async deleteInstitute(insId) {
-			const data = await this.$axios.$delete('/api/institutes', { data: { id: insId } });
-			this.institutes = data.newData.data;
+			const data = await this.$axios.$post('/api/institutes/delete', { id: insId });
+			this.institutes = this.institutes.filter(ins => ins.id !== data.id);
 		}
 	}
 }
