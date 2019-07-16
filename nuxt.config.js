@@ -19,7 +19,9 @@ export default {
   },
   loading: { color: '#fff' },
   css: [],
-  plugins: [],
+  plugins: [
+	{ src: '~/plugins/veeValidate' }
+  ],
   modules: [
     'nuxt-buefy',
     '@nuxtjs/axios',

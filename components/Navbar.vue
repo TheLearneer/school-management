@@ -19,6 +19,7 @@
 				<nuxt-link class="navbar-item" to="/about">About</nuxt-link>
 				
 				<a v-if="!$auth.loggedIn" class="navbar-item" @click="isLoginModalActive=true">Login</a>
+				<nuxt-link v-if="!$auth.loggedIn" class="navbar-item" to="/register">Sign Up</nuxt-link>
 				
 				<div v-if="$auth.loggedIn" class="navbar-item has-dropdown is-hoverable">
 					<nuxt-link to="/" class="navbar-link">{{ $auth.user.name }}</nuxt-link>
@@ -33,29 +34,33 @@
 		</div>
 	</nav>
 	
-	<b-modal :active.sync="isLoginModalActive" align="center">
-           <div class="modal-card">
-			<section class="modal-card-body">
-				<h3 class="title has-text-centered has-text-dark">Member Login</h3>
-				<div class="box">
-					<b-field label="Username">
-						<b-input v-model="username" type="text" placeholder="Username">
-						</b-input>
-					</b-field>
-					<b-field label="Password">
-						<b-input v-model="password" type="password" placeholder="Password" password-reveal />
-					</b-field>
-					
-					<button class="button is-dark is-large is-fullwidth" @click="login()">
-						Login
-					</button>
-				</div>
-				<p v-if="error">
-					{{ error }}
-				</p>
-			</section>
-		</div>
-    </b-modal>
+	<form @submit.prevent="login">
+		<b-modal :active.sync="isLoginModalActive" align="center">
+			   <div class="modal-card">
+				<section class="modal-card-body">
+					<h3 class="title has-text-centered has-text-dark">Member Login</h3>
+					<div class="box">
+						<b-field label="Username">
+							<b-input v-model="username" type="text" placeholder="Username">
+							</b-input>
+						</b-field>
+						<b-field label="Password">
+							<b-input v-model="password" type="password" placeholder="Password" password-reveal />
+						</b-field>
+						
+						<button type="submit" class="button is-dark">
+							Login
+						</button>
+						<div v-if="error">
+							<br>
+							{{ error }}
+						</div>
+						
+					</div>
+				</section>
+			</div>
+		</b-modal>
+	</form>
   </div>
 </template>
 

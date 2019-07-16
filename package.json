@@ -22,7 +22,8 @@
     "express-jwt": "^5.3.1",
     "jsonwebtoken": "^8.5.1",
     "nuxt": "^2.0.0",
-    "nuxt-buefy": "^0.3.10"
+    "nuxt-buefy": "^0.3.10",
+    "vee-validate": "^2.2.13"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
