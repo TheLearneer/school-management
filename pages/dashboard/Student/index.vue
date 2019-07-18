@@ -6,6 +6,6 @@
 
 <script>
 export default {
-	middleware: 'authInstituteStudent'
+	middleware: 'authentication',
 }
 </script>

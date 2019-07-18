@@ -59,7 +59,7 @@
 
 <script>
 export default {
-	middleware: 'authSiteAdmin',
+	middleware: 'authentication',
 	async asyncData ({ $axios }) {
 		const data = await $axios.$get('/api/institutes');
 		return { institutes: data.institutes };

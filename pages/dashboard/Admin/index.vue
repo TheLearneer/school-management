@@ -25,7 +25,7 @@
 
 <script>
 export default {
-	middleware: 'authInstituteAdmin',
+	middleware: 'authentication',
 	data() {
 		return {
 			data: [

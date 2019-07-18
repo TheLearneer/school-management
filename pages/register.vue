@@ -70,7 +70,7 @@
 			<b-field horizontal label="Date of Birth"
 				:type="{'is-danger': errors.has('dob')}"
 				:message="errors.first('dob') ? 'Date of Birth is required!' : ''">
-				<b-datepicker v-model="dob"	name="dob" placeholder="Click to select..." icon="calendar-today" v-validate="'required'" />
+				<b-datepicker v-model="dob"	name="dob" placeholder="Select date of birth..." icon="calendar-today" v-validate="'required'" />
 			</b-field>
 			<br>
 			

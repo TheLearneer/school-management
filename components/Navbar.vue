@@ -14,88 +14,49 @@
       </div>
 	
 		<div id="navMenu" class="navbar-menu">
-			<div class="navbar-end">
+			<div class="navbar-start">
 				<nuxt-link class="navbar-item" to="/">Home</nuxt-link>
 				<nuxt-link class="navbar-item" to="/about">About</nuxt-link>
-				
-				<a v-if="!$auth.loggedIn" class="navbar-item" @click="isLoginModalActive=true">Login</a>
-				<nuxt-link v-if="!$auth.loggedIn" class="navbar-item" to="/register">Sign Up</nuxt-link>
-				
-				<div v-if="$auth.loggedIn" class="navbar-item has-dropdown is-hoverable">
-					<nuxt-link to="/" class="navbar-link">{{ $auth.user.name }}</nuxt-link>
-					<div class="navbar-dropdown is-right">
-						<nuxt-link class="navbar-item" :to=dashboardURL>Dashboard</nuxt-link>
-						<hr class="navbar-divider">
-						<a class="navbar-item" @click="$auth.logout()">Logout</a>
-					</div>
-				</div>
-				
+			</div>
+			
+			<div v-if="!$auth.loggedIn" class="navbar-end">
+				<nuxt-link class="navbar-item" to="/login">Login</nuxt-link>
+				<nuxt-link class="navbar-item" to="/register">Sign Up</nuxt-link>
+			</div>
+
+			<div v-else class="navbar-end">
+				<b-dropdown	class="navbar-item" hoverable aria-role="list">
+                    <div slot="trigger">
+						<span>{{ $auth.user.name }}</span>
+                        <b-icon icon="menu-down" />
+                    </div>
+					<b-dropdown-item has-link aria-role="menuitem">
+                        <nuxt-link to="/dashboard/me">
+                            <b-icon icon="account" />
+                            Profile
+                        </nuxt-link>
+                    </b-dropdown-item>
+                    <b-dropdown-item v-if="$auth.loggedIn && $auth.user.permissions.length" has-link aria-role="menuitem">
+                        <nuxt-link to="/dashboard">
+                            <b-icon icon="settings" />
+                            Dashboard
+                        </nuxt-link>
+                    </b-dropdown-item>
+                    <hr class="dropdown-divider" aria-role="menuitem">
+                    <b-dropdown-item value="logout" aria-role="menuitem" @click="$auth.logout()">
+                        <b-icon icon="logout" />
+                        Logout
+                    </b-dropdown-item>
+                </b-dropdown>
 			</div>
 		</div>
 	</nav>
-	
-	<form @submit.prevent="login">
-		<b-modal :active.sync="isLoginModalActive" align="center">
-			   <div class="modal-card">
-				<section class="modal-card-body">
-					<h3 class="title has-text-centered has-text-dark">Member Login</h3>
-					<div class="box">
-						<b-field label="Username">
-							<b-input v-model="username" type="text" placeholder="Username">
-							</b-input>
-						</b-field>
-						<b-field label="Password">
-							<b-input v-model="password" type="password" placeholder="Password" password-reveal />
-						</b-field>
-						
-						<button type="submit" class="button is-dark">
-							Login
-						</button>
-						<div v-if="error">
-							<br>
-							{{ error }}
-						</div>
-						
-					</div>
-				</section>
-			</div>
-		</b-modal>
-	</form>
   </div>
 </template>
 
 <script>
 export default {
-	name: 'AppNavbar',
-	data() {
-		return {
-			isLoginModalActive: false,
-			username: null,
-			password: '',
-			error: ''
-		}
-	},
-	computed: {
-		dashboardURL() {
-			return this.$auth.user ? `/dashboard/${this.$auth.user.role}` : '/dashboard';
-		}
-	},
-	methods: {
-		async login() {
-			try {
-				const data = await this.$auth.loginWith('local', { data: { username: this.username, password: this.password } });
-				console.log(data);
-				this.username = '';
-				this.password = '';
-				this.error = '';
-				this.isLoginModalActive = false;
-				console.log(this.$auth.loggedIn, this.$auth.user);
-			} catch(err) {
-				console.log(err);
-				this.error = err.response ? err.response.data : 'Some error'; 
-			}
-		}
-	}
+	name: 'AppNavbar'
 };
 
 // Navbar burger for smaller width devices...
