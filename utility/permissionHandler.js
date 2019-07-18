@@ -1,13 +1,34 @@
 const Permissions = {
-  'MANAGE_INSTITUTE': 1,
-  'EDIT_INSTITUTE': 2,
-  'MANAGE_ADMINS': 4,
-  'MANAGE_INSTITUTE_PERMISSIONS': 8,
-  'MANAGE_NOTICE': 10
+  'MANAGE_INSTITUTE': {
+	value: 1,
+	description: 'Add/Remove Institutes'
+  },
+  'EDIT_INSTITUTE': {
+	value: 2,
+	description: 'Update Institute details'
+  },
+  'MANAGE_ADMINS': {
+	value: 4,
+	description: 'Add/Remove Institute admins'
+  },
+  'MANAGE_INSTITUTE_USERS': {
+	value: 8,
+	description: 'Add/Remove users affiliated with Institute'
+  },
+  'MANAGE_NOTICE': {
+	value: 10,
+	description: 'Add/Remove notices'
+  }
+}
+
+function getDescriptions(perms) {
+  const descriptions = getPermissions(perms).map(_perm => Permissions[_perm].description);
+  if (!descriptions.length) descriptions.push('Read informations!');
+  return descriptions;
 }
 
 function hasPermission(perms, permToCheck) {
-  return Boolean(parseInt(perms) & Permissions[permToCheck]);
+  return Boolean(parseInt(perms) & Permissions[permToCheck].value);
 }
 
 function getPermissions(perms) {
@@ -18,15 +39,8 @@ function getPermissions(perms) {
   return permKeys;
 }
 
-function getRole(perms) {
-  if (perms === 0) return 'student';
-  else if (hasPermission(perms, 'MANAGE_INSTITUTE')) return 'super-admin'
-  else if (hasPermission(perms, 'EDIT_INSTITUTE')) return 'admin';
-  else return 'teacher';
-}
-
 export default {
   hasPermission,
   getPermissions,
-  getRole
+  getDescriptions
 };

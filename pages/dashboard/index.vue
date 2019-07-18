@@ -15,12 +15,12 @@
 				<img src="https://via.placeholder.com/64.png" />
 			</div>
 			<div class="column">
-				<n-link :to="generateDashboardURL(perm.permissions, perm.instituteid)">
+				<n-link :to="getDashURL(perm.instituteid)">
 					Institute {{ perm.instituteid }}
 				</n-link>
 			</div>
 			<div class="column">
-				Role :- {{ getRole(perm.permissions) }}
+				Role :- No idea :P
 			</div>
 			<div class="column is-1">
 				{{ perm.permissions }}
@@ -30,18 +30,11 @@
 </template>
 
 <script>
-import perms from '~/utility/permissionHandler';
-
 export default {
 	middleware: 'authentication',
 	methods: {
-		generateDashboardURL(permissions, id) { 
-			const role = this.getRole(permissions);
-			const extended = role === 'super-admin' ? '' : `?id=${id}`
-			return { path: `/dashboard/${role}`, query: { id } };
-		},
-		getRole(permissions) {
-			return perms.getRole(parseInt(permissions));
+		getDashURL(id) {
+			return id ? { path: '/dashboard/institute', query: { id } } : { path: '/dashboard/super-admin' }
 		}
 	}
 }

@@ -16,7 +16,6 @@
 		<div id="navMenu" class="navbar-menu">
 			<div class="navbar-start">
 				<nuxt-link class="navbar-item" to="/">Home</nuxt-link>
-				<nuxt-link class="navbar-item" to="/about">About</nuxt-link>
 			</div>
 			
 			<div v-if="!$auth.loggedIn" class="navbar-end">
