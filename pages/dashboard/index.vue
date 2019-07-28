@@ -15,8 +15,8 @@
 				<img src="https://via.placeholder.com/64.png" />
 			</div>
 			<div class="column">
-				<n-link :to="getDashURL(perm.instituteid)">
-					Institute {{ perm.instituteid }}
+				<n-link :to="getDashURL(perm.instituteId)">
+					Institute {{ perm.instituteId }}
 				</n-link>
 			</div>
 			<div class="column">

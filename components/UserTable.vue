@@ -1,5 +1,5 @@
 <template>
-    <div class="section" v-if="visible()">
+    <div class="section">
 		<h1 class="title is-2">
 			Users Affiliated
 		</h1>
@@ -10,8 +10,6 @@
 			hoverable
             per-page=10
 			show-detail-icon
-			detailed
-			detail-key="id"
             aria-next-label="Next page"
             aria-previous-label="Previous page"
             aria-page-label="Page"
@@ -19,30 +17,31 @@
 
             <template slot-scope="props">
                 <b-table-column field="Name" label="Name" icon="human-male">
-					 <b-icon :icon="props.row.gender === 'M' ? 'human-male' : 'human-female'" />
-                    {{ props.row.name }}
-                </b-table-column>
-								
+					<b-tooltip :label="getUserType(props.row.permissions)" position="is-bottom">
+						<b-icon :icon="props.row.gender === 'M' ? 'human-male' : 'human-female'" :class="[
+									{'has-text-danger': getUserType(props.row.permissions) === 'admin' },
+									{'has-text-warning': getUserType(props.row.permissions) === 'teacher' },
+									{'has-text-info': getUserType(props.row.permissions) === 'student'}
+								]" />
+						{{ props.row.name }}
+					</b-tooltip>
+                </b-table-column>								
 				<b-table-column label="Contact Number" centered>
 					{{ props.row.phone }}
-				</b-table-column>
-				
+				</b-table-column>				
 				<b-table-column label="Contact Email" centered>
 					<a :href="`mailto:${props.row.email}`" target="_blank">{{ props.row.email }}</a>
-				</b-table-column>
-				
+				</b-table-column>				
 				<b-table-column label="Address" centered>
 					{{ props.row.address }}
-				</b-table-column>
-				
+				</b-table-column>				
 				<b-table-column label="DOB" centered>
 					<span class="tag is-success">
                         {{ new Date(props.row.dob).toLocaleDateString() }}
                     </span>
-				</b-table-column>
-				
+				</b-table-column>				
 				<b-table-column label="Actions" centered>
-					<a @click="removeUser(props.row.id, props.row.name)">
+					<a @click="removeUser(props.row.id, props.row.name)" v-if="checkUserDeletable(props.row.id)">
 						<b-tooltip label="Remove User from institute!" type="is-danger">
 							<b-icon type="is-danger" icon="delete-forever" />
 						</b-tooltip>
@@ -64,18 +63,70 @@
                 </section>
             </template>
 			
-			<template slot="detail" slot-scope="props">
-				<span><u>Permissions of user:</u></span>
-				<br>
-				<br>
-				<b-taglist class="tags">
-					<b-tag rounded type="is-info" v-for="tag of getPermDescription(props.row.permissions)" :key="tag.split(' ').join('_')">
-						{{ tag }}
-					</b-tag>
-				</b-taglist>
-            </template>
-
+			<template slot="footer">
+                <div>
+					<button class="button is-info" @click="isComponentModalActive = true">
+						Add new user
+					</button>
+                </div>
+            </template>		
         </b-table>
+
+		<b-modal :active.sync="isComponentModalActive" full-screen :can-cancel="false" key="newUserModal">
+				<div class="modal-card" style="width: auto">
+					<header class="modal-card-head">
+						<p class="modal-card-title">Add New User Associated to the Institute</p>
+					</header>
+					<section class="modal-card-body">
+						<form @submit.prevent="addInstituteUser">
+							<b-field label="UserID"
+								:type="{'is-danger': errors.has('username')}"
+								:message="errors.first('username') ? 'Please enter the userID or email!' : ''">
+								<b-input v-model="user.username" name="username" icon="account" placeholder="UserID or Email" v-validate="'required'" />
+							</b-field>
+							<br>
+							
+							<h1 class="title is-3">Role</h1>
+							<div class="block">
+								<b-radio v-model="userSelection" native-value="admin" type="is-danger">
+									Admin
+								</b-radio>
+								<b-radio v-model="userSelection" native-value="teacher" type="is-success">
+									Teacher
+								</b-radio>
+								<b-radio v-model="userSelection" native-value="user" type="is-success">
+									Normal User
+								</b-radio>
+							</div>
+
+							<h1 class="title is-4">Permissions</h1>
+							<div class="field">
+								<b-checkbox v-model="user.permissions"	native-value="MANAGE_ADMINS" :disabled="userSelection!=='admin'">
+									Add/Remove Admin users for the institute
+								</b-checkbox>
+							</div>
+							<div class="field">
+								<b-checkbox v-model="user.permissions"	native-value="MANAGE_INSTITUTE_USERS" :disabled="userSelection!=='admin'">
+									Add/Remove Users associated with the institute
+								</b-checkbox>
+							</div>
+							<div class="field">
+								<b-checkbox v-model="user.permissions"	native-value="MANAGE_NOTICE" :disabled="userSelection!=='admin'">
+									Manage Notices of the institute
+								</b-checkbox>
+							</div>
+							<div class="field">
+								<b-checkbox v-model="user.permissions" native-value="MANAGE_ASSIGNMENTS" :disabled="userSelection === 'user'">
+									Manage Assignments
+								</b-checkbox>
+							</div>
+							<hr>
+							<b-button rounded type="is-info" icon-left="check" @click="addInstituteUser">Submit</b-button>
+							<b-button rounded class="is-pulled-right" type="is-danger" icon-left="close" @click="closeModal">Close</b-button>
+						</form>
+					</section>
+				</div>
+			</b-modal>
     </div>
 </template>
 
@@ -86,10 +137,20 @@ export default {
     data() {
         return {
             data: [],
-            loading: false
+            loading: false,
+			isComponentModalActive: false,
+			userSelection: 'user',
+			user: {
+				username: null,
+				permissions: []
+			}
         }
     },
     methods: {
+		getUserType(permissions) {
+			const userPerms = perms.available(permissions);
+			return userPerms.includes('ADMINISTRATOR') ? 'admin' : !userPerms.length ? 'student' : 'teacher';
+		},
         async loadAsyncData() {
             this.loading = true
 			try {
@@ -109,8 +170,17 @@ export default {
 				});
 			}
         },
-		getPermDescription(permissions) {
-			return perms.getDescriptions(permissions);
+		checkUserDeletable(id) {
+			// Getting all the permissions...
+			const authUserPerms = perms.available(this.$auth.user.permissions.find(perms => perms.instituteId === this.$route.query.id).permissions);
+			// Cannot delete self...
+			if (this.$auth.user.id === id) return false;
+			// Getting user details...
+			const user = this.data.find(_usr => _usr.id === id);
+			// Checking if the user to be deleted is admin or not...
+			if (perms.hasPermission(user.permissions, 'ADMINISTRATOR') && !authUserPerms.find(_perm => _perm === 'MANAGE_ADMINS')) return false;
+			// Deletable otherwise...
+			return true;
 		},
 		removeUser(id, name) {
 			this.$dialog.confirm({
@@ -130,10 +200,35 @@ export default {
 				}
 			});
 		},
-		visible() {
-			const permissions = this.$auth.user.permissions.find(perm => perm.instituteid === this.$route.query.id)
-			// TODO:: Fix the permission system and use the 'MANAGE_INSTITUTE_USERS' key here
-			return perms.hasPermission(permissions.permissions, 'EDIT_INSTITUTE');
+		async addInstituteUser() {
+			// Running the validator...
+			const result = await this.$validator.validateAll();
+			// Not registering the user if form is not valid...
+			if (!result) {
+				return this.$toast.open({
+					message: 'Please fill the registration form properly!',
+					type: 'is-danger'
+				});
+			}
+			if (this.userSelection === 'admin' && !this.user.permissions.find('ADMINISTRATOR')) this.user.permissions.push('ADMINISTRATOR');
+			try {
+				const permissions = perms.resolve(this.user.permissions);
+				await this.$axios.post('/api/institutes/users/add', { id: this.user.username, instituteId: this.$route.query.id, permissions });
+				// Reverting stuffs until better fix...
+				this.closeModal();
+				// Load the user's data again...
+				await this.loadAsyncData();
+			} catch(err) {
+				if (err.response) return this.$toast.open({ message: err.response.data, type: 'is-danger' });
+				this.$toast.open({message: err})
+			}
+		},
+		closeModal() {
+			this.isComponentModalActive = false;
+			this.$nextTick(() => {				
+				this.user.username = null;
+				this.user.permissions = [];
+			})
 		}
     },
     async mounted() {
