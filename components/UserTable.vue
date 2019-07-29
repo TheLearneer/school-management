@@ -130,7 +130,7 @@
 								</b-checkbox>
 							</div>
 							<div class="field">
-								<b-checkbox v-model="user.permissions" native-value="MANAGE_ASSIGNMENTS" :disabled="userSelection === 'user'">
+								<b-checkbox v-model="user.permissions" native-value="MANAGE_ASSIGNMENTS" :disabled="userSelection === 'student'">
 									Manage Assignments
 								</b-checkbox>
 							</div>
@@ -238,7 +238,7 @@ export default {
 					type: 'is-danger'
 				});
 			}
-			if (this.userSelection === 'admin' && !this.user.permissions.find('ADMINISTRATOR')) this.user.permissions.push('ADMINISTRATOR');
+			if (this.userSelection === 'admin' && !this.user.permissions.includes('ADMINISTRATOR')) this.user.permissions.push('ADMINISTRATOR');
 			try {
 				const permissions = perms.resolve(this.user.permissions);
 				await this.$axios.post('/api/institutes/users/add', { id: this.user.username, instituteId: this.$route.query.id, permissions });
