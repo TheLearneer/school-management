@@ -4,10 +4,10 @@
             <b-tab-item  v-if="permissions.includes('MANAGE_INSTITUTE_USERS')" label="Users" icon="account">				
 				<userTable />
 			</b-tab-item>
-            <b-tab-item label="Notices" icon="library-music">
-				{{ getDescription(permissions) }}
+            <b-tab-item label="Notices" icon="information">
+				<noticeBoard />
 			</b-tab-item>
-			<b-tab-item v-if="!permissions.length || permissions.includes('MANAGE_ASSIGNMENTS')" label="Assignments" icons="notebook">
+			<b-tab-item v-if="!permissions.length || permissions.includes('MANAGE_ASSIGNMENTS')" label="Assignments" icon="book-open">
 				This is assignment tab
 			</b-tab-item>
         </b-tabs>
@@ -17,10 +17,11 @@
 <script>
 import perms from '~/utility/permissionHandler';
 import userTable from '~/components/UserTable';
+import noticeBoard from '~/components/noticeBoard';
 
 export default {
 	middleware: 'authentication',
-	components: { userTable },
+	components: { userTable, noticeBoard },
 	watchQuery: true,
 	computed: {
 		permissions() {

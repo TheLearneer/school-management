@@ -10,20 +10,22 @@
 			Select the dashboard page you want to continue into!
 		</p>
 		<br>
-		<div class="box columns" v-for="perm in $auth.user.permissions">
-			<div class="column is-1">
-				<img src="https://via.placeholder.com/64.png" />
-			</div>
-			<div class="column">
-				<n-link :to="getDashURL(perm.instituteId)">
-					Institute {{ perm.instituteId }}
-				</n-link>
-			</div>
-			<div class="column">
-				Role :- No idea :P
-			</div>
-			<div class="column is-1">
-				{{ perm.permissions }}
+		<div class="box" v-for="perm in $auth.user.permissions">
+			<div class="columns">
+				<div class="column is-1">
+					<img src="https://via.placeholder.com/64.png" />
+				</div>
+				<div class="column">
+					<n-link :to="getDashURL(perm.instituteId)">
+						Institute {{ perm.instituteId }}
+					</n-link>
+				</div>
+				<div class="column">
+					Role :- No idea :P
+				</div>
+				<div class="column is-1">
+					{{ perm.permissions }}
+				</div>
 			</div>
 		</div>
 	</div>

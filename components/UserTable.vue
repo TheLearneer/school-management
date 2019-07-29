@@ -10,21 +10,22 @@
 			hoverable
             per-page=10
 			show-detail-icon
+			default-sort="name"
             aria-next-label="Next page"
             aria-previous-label="Previous page"
             aria-page-label="Page"
             aria-current-label="Current page">
 
             <template slot-scope="props">
-                <b-table-column field="Name" label="Name" icon="human-male">
-					<b-tooltip :label="getUserType(props.row.permissions)" position="is-bottom">
+                <b-table-column field="name" label="Name" icon="human-male" sortable>
+					<b-tooltip :label="getUserType(props.row.permissions)" position="is-bottom" type="is-dark">
 						<b-icon :icon="props.row.gender === 'M' ? 'human-male' : 'human-female'" :class="[
 									{'has-text-danger': getUserType(props.row.permissions) === 'admin' },
 									{'has-text-warning': getUserType(props.row.permissions) === 'teacher' },
 									{'has-text-info': getUserType(props.row.permissions) === 'student'}
 								]" />
-						{{ props.row.name }}
 					</b-tooltip>
+					{{ props.row.name }}
                 </b-table-column>								
 				<b-table-column label="Contact Number" centered>
 					{{ props.row.phone }}
@@ -184,7 +185,7 @@ export default {
 		},
 		removeUser(id, name) {
 			this.$dialog.confirm({
-				title: 'Removing user',
+				title: 'Remove user ??',
 				message: `Are you sure you want to <i>remove</i> <b>${name}</b> from the institute? This action cannot be undone.`,
 				type: 'is-danger',
 				hasIcon: true,
