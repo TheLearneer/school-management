@@ -1,10 +1,23 @@
 <template>
     <div class="section">
-		<h1 class="title is-2">
-			Users Affiliated
-		</h1>
+		<p class="title is-5">Filter Users:</p>
+		<div class="block">
+			<b-radio v-model="userListing" native-value="all" type="is-success">
+				Everyone
+			</b-radio>
+			<b-radio v-model="userListing" native-value="admin" type="is-danger">
+				Admin
+			</b-radio>
+			<b-radio v-model="userListing" native-value="teacher" type="is-warning">
+				Teacher
+			</b-radio>
+			<b-radio v-model="userListing" native-value="student" type="is-info">
+				Student
+			</b-radio>
+		</div>
+
         <b-table
-            :data="data"
+            :data="tableUsers"
             :loading="loading"
             paginated
 			hoverable
@@ -95,7 +108,7 @@
 								<b-radio v-model="userSelection" native-value="teacher" type="is-success">
 									Teacher
 								</b-radio>
-								<b-radio v-model="userSelection" native-value="user" type="is-success">
+								<b-radio v-model="userSelection" native-value="student" type="is-success">
 									Normal User
 								</b-radio>
 							</div>
@@ -140,13 +153,27 @@ export default {
             data: [],
             loading: false,
 			isComponentModalActive: false,
-			userSelection: 'user',
+			userListing: 'all',
+			userSelection: 'student',
 			user: {
 				username: null,
 				permissions: []
 			}
         }
     },
+	computed: {
+		tableUsers() {
+			return this.data.filter(user => {
+				if (this.userListing === 'all') return true;
+				
+				const userType = this.getUserType(user.permissions);
+				if (this.userListing === 'admin' && userType !== 'admin') return false;
+				if (this.userListing === 'teacher' && userType !== 'teacher') return false;
+				if (this.userListing === 'student' && userType !== 'student') return false;
+				return true;
+			})
+		}
+	},
     methods: {
 		getUserType(permissions) {
 			const userPerms = perms.available(permissions);
