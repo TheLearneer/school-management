@@ -5,7 +5,7 @@
 				<userTable />
 			</b-tab-item>
             <b-tab-item label="Notices" icon="information">
-				<noticeBoard />
+				<noticeBoard :perms="permissions" />
 			</b-tab-item>
 			<b-tab-item v-if="!permissions.length || permissions.includes('MANAGE_ASSIGNMENTS')" label="Assignments" icon="book-open">
 				This is assignment tab

@@ -10,7 +10,7 @@
 		</div>
 		<hr>
 		<div>
-			<button v-if="permissions.includes('MANAGE_NOTICE')" class="button is-info" @click="isComponentModalActive = true">
+			<button v-if="perms.includes('MANAGE_NOTICE')" class="button is-info" @click="isComponentModalActive = true">
 				Add new notice
 			</button>
         </div>
@@ -42,16 +42,12 @@
 import perms from '~/utility/permissionHandler';
 
 export default {
+	props: { perms },
 	data() {
 		return {
 			notices: [],
 			isComponentModalActive: false,
 			newNotice: null
-		}
-	},
-	computed: {
-		permissions() {
-			return perms.available(this.$auth.user.permissions.find(perms => perms.instituteId === this.$route.query.id).permissions);
 		}
 	},
 	methods: {
