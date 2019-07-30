@@ -99,40 +99,47 @@
 								<b-input v-model="user.username" name="username" icon="account" placeholder="UserID or Email" v-validate="'required'" />
 							</b-field>
 							<br>
-							
-							<h1 class="title is-3">Role</h1>
+
+							<h1 class="title is-3">Permissions</h1>
 							<div class="block">
-								<b-radio v-model="userSelection" native-value="admin" type="is-danger">
+								<b-radio v-model="userSelection" native-value="admin" type="is-danger" :disabled="customPermissions">
 									Admin
 								</b-radio>
-								<b-radio v-model="userSelection" native-value="teacher" type="is-success">
+								<b-radio v-model="userSelection" native-value="teacher" type="is-warning" :disabled="customPermissions">
 									Teacher
 								</b-radio>
-								<b-radio v-model="userSelection" native-value="student" type="is-success">
+								<b-radio v-model="userSelection" native-value="student" type="is-success" :disabled="customPermissions">
 									Normal User
 								</b-radio>
 							</div>
+							<div class="field">
+								<b-checkbox v-model="customPermissions">
+									Select Custom Permissions
+								</b-checkbox>
+							</div>
+							<br>
 
-							<h1 class="title is-4">Permissions</h1>
-							<div class="field">
-								<b-checkbox v-model="user.permissions"	native-value="MANAGE_ADMINS" :disabled="userSelection!=='admin'">
-									Add/Remove Admin users for the institute
-								</b-checkbox>
-							</div>
-							<div class="field">
-								<b-checkbox v-model="user.permissions"	native-value="MANAGE_INSTITUTE_USERS" :disabled="userSelection!=='admin'">
-									Add/Remove Users associated with the institute
-								</b-checkbox>
-							</div>
-							<div class="field">
-								<b-checkbox v-model="user.permissions"	native-value="MANAGE_NOTICE" :disabled="userSelection!=='admin'">
-									Manage Notices of the institute
-								</b-checkbox>
-							</div>
-							<div class="field">
-								<b-checkbox v-model="user.permissions" native-value="MANAGE_ASSIGNMENTS" :disabled="userSelection === 'student'">
-									Manage Assignments
-								</b-checkbox>
+							<div class="box">
+								<div class="field">
+									<b-checkbox v-model="user.permissions"	native-value="MANAGE_ADMINS" :disabled="userSelection!=='admin' && !customPermissions">
+										Add/Remove Admin users for the institute
+									</b-checkbox>
+								</div>
+								<div class="field">
+									<b-checkbox v-model="user.permissions"	native-value="MANAGE_INSTITUTE_USERS" :disabled="userSelection!=='admin' && !customPermissions">
+										Add/Remove Users associated with the institute
+									</b-checkbox>
+								</div>
+								<div class="field">
+									<b-checkbox v-model="user.permissions"	native-value="MANAGE_NOTICE" :disabled="userSelection!=='admin' && !customPermissions">
+										Manage Notices of the institute
+									</b-checkbox>
+								</div>
+								<div class="field">
+									<b-checkbox v-model="user.permissions" native-value="MANAGE_ASSIGNMENTS" :disabled="userSelection!=='teacher' && !customPermissions">
+										Manage Assignments
+									</b-checkbox>
+								</div>
 							</div>
 							<hr>
 							<b-button rounded type="is-info" icon-left="check" @click="addInstituteUser">Submit</b-button>
@@ -155,6 +162,7 @@ export default {
 			isComponentModalActive: false,
 			userListing: 'all',
 			userSelection: 'student',
+			customPermissions: false,
 			user: {
 				username: null,
 				permissions: []
