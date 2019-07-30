@@ -39,10 +39,8 @@
 </template>
 
 <script>
-import perms from '~/utility/permissionHandler';
-
 export default {
-	props: { perms },
+	props: [ 'perms' ],
 	data() {
 		return {
 			notices: [],

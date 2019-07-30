@@ -152,9 +152,10 @@
 </template>
 
 <script>
-import perms from '~/utility/permissionHandler';
+import permissionHandler from '~/utility/permissionHandler';
 
 export default {
+	props: [ 'perms' ],
     data() {
         return {
             data: [],
@@ -187,7 +188,7 @@ export default {
 			const adminPerms = ['ADMINISTRATOR', 'MANAGE_ADMINS', 'MANAGE_INSTITUTE_USERS', 'MANAGE_NOTICE'];
 			const teacherPerms = ['MANAGE_ASSIGNMENTS'];
 
-			const userPerms = perms.available(permissions);
+			const userPerms = permissionHandler.available(permissions);
 
 			return adminPerms.some(ap => userPerms.includes(ap)) ? 'admin' : teacherPerms.some(tp => userPerms.includes(tp)) ? 'teacher' : 'student';
 		},
@@ -211,15 +212,9 @@ export default {
 			}
         },
 		checkUserDeletable(id) {
-			// Getting all the permissions...
-			const authUserPerms = perms.available(this.$auth.user.permissions.find(perms => perms.instituteId === this.$route.query.id).permissions);
-			// Cannot delete self...
 			if (this.$auth.user.id === id) return false;
-			// Getting user details...
 			const user = this.data.find(_usr => _usr.id === id);
-			// Checking if the user to be deleted is admin or not...
-			if (perms.hasPermission(user.permissions, 'ADMINISTRATOR') && !authUserPerms.find(_perm => _perm === 'MANAGE_ADMINS')) return false;
-			// Deletable otherwise...
+			if (permissionHandler.hasPermission(user.permissions, 'ADMINISTRATOR') && !this.perms.includes('MANAGE_ADMINS')) return false;
 			return true;
 		},
 		removeUser(id, name) {
@@ -232,7 +227,6 @@ export default {
 					try {
 						await this.$axios.post('/api/institutes/users/delete', { id, instituteId: this.$route.query.id });
 						this.data = this.data.filter(_user => _user.id !== id);
-						// Confirmation toast...
 						return this.$toast.open({ message: `Successfully removed ${name} from the institute.`, type: 'is-success' });
 					} catch(err) {
 						return this.$toast.open({ message: err.response.data, type: 'is-danger' });
@@ -241,9 +235,7 @@ export default {
 			});
 		},
 		async addInstituteUser() {
-			// Running the validator...
 			const result = await this.$validator.validateAll();
-			// Not registering the user if form is not valid...
 			if (!result) {
 				return this.$toast.open({
 					message: 'Please fill the registration form properly!',
@@ -252,11 +244,9 @@ export default {
 			}
 			if (this.userSelection === 'admin' && !this.user.permissions.includes('ADMINISTRATOR')) this.user.permissions.push('ADMINISTRATOR');
 			try {
-				const permissions = perms.resolve(this.user.permissions);
+				const permissions = permissionHandler.resolve(this.user.permissions);
 				await this.$axios.post('/api/institutes/users/add', { id: this.user.username, instituteId: this.$route.query.id, permissions });
-				// Reverting stuffs until better fix...
 				this.closeModal();
-				// Load the user's data again...
 				await this.loadAsyncData();
 			} catch(err) {
 				if (err.response) return this.$toast.open({ message: err.response.data, type: 'is-danger' });
