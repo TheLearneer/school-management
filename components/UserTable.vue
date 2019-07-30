@@ -176,8 +176,12 @@ export default {
 	},
     methods: {
 		getUserType(permissions) {
+			const adminPerms = ['ADMINISTRATOR', 'MANAGE_ADMINS', 'MANAGE_INSTITUTE_USERS', 'MANAGE_NOTICE'];
+			const teacherPerms = ['MANAGE_ASSIGNMENTS'];
+
 			const userPerms = perms.available(permissions);
-			return userPerms.includes('ADMINISTRATOR') ? 'admin' : !userPerms.length ? 'student' : 'teacher';
+
+			return adminPerms.some(ap => userPerms.includes(ap)) ? 'admin' : teacherPerms.some(tp => userPerms.includes(tp)) ? 'teacher' : 'student';
 		},
         async loadAsyncData() {
             this.loading = true
