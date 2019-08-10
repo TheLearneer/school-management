@@ -6,7 +6,17 @@
 			</div>
 		</div>
 		<div v-if="!notices.length">
-			<p>No notices available</p>
+			<div class="section">
+                <div class="content has-text-grey has-text-centered">
+                    <p>
+                        <b-icon
+                            icon="alert-octagram"
+                            size="is-large">
+                        </b-icon>
+                    </p>
+					<p>No notices available!</p>
+                </div>
+            </div>
 		</div>
 		<hr>
 		<div>

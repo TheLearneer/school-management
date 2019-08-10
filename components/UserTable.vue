@@ -30,7 +30,11 @@
             aria-current-label="Current page">
 
             <template slot-scope="props">
+
                 <b-table-column field="name" label="Name" icon="human-male" sortable>
+					<template slot="header" slot-scope="{ column }">
+						<b-icon icon="account" size="is-small" /> {{ column.label }}
+					</template>
 					<b-tooltip :label="getUserType(props.row.permissions)" position="is-bottom" type="is-dark">
 						<b-icon :icon="props.row.gender === 'M' ? 'human-male' : 'human-female'" :class="[
 									{'has-text-danger': getUserType(props.row.permissions) === 'admin' },
@@ -39,28 +43,52 @@
 								]" />
 					</b-tooltip>
 					{{ props.row.name }}
-                </b-table-column>								
+                </b-table-column>
+
 				<b-table-column label="Contact Number" centered>
+					<template slot="header" slot-scope="{ column }">
+						<b-icon icon="phone" size="is-small" /> {{ column.label }}
+					</template>
 					{{ props.row.phone }}
-				</b-table-column>				
-				<b-table-column label="Contact Email" centered>
+				</b-table-column>
+
+				<b-table-column label="Email" centered>
+					<template slot="header" slot-scope="{ column }">
+						<b-icon icon="email" size="is-small" /> {{ column.label }}
+					</template>
 					<a :href="`mailto:${props.row.email}`" target="_blank">{{ props.row.email }}</a>
-				</b-table-column>				
+				</b-table-column>
+
 				<b-table-column label="Address" centered>
+					<template slot="header" slot-scope="{ column }">
+						<b-icon icon="map" size="is-small" /> {{ column.label }}
+					</template>
 					{{ props.row.address }}
-				</b-table-column>				
+				</b-table-column>
+
 				<b-table-column label="DOB" centered>
+					<template slot="header" slot-scope="{ column }">
+						<b-icon icon="calendar-text" size="is-small" />
+						<b-tooltip label="Date of birth">
+							{{ column.label }}
+						</b-tooltip>
+					</template>
 					<span class="tag is-success">
                         {{ new Date(props.row.dob).toLocaleDateString() }}
                     </span>
-				</b-table-column>				
+				</b-table-column>
+
 				<b-table-column label="Actions" centered>
+					<template slot="header" slot-scope="{ column }">
+						<b-icon icon="account-edit" size="is-small" /> {{ column.label }}
+					</template>
 					<a @click="removeUser(props.row.id, props.row.name)" v-if="checkUserDeletable(props.row.id)">
-						<b-tooltip label="Remove User from institute!" type="is-danger">
+						<b-tooltip label="Remove User!" type="is-danger">
 							<b-icon type="is-danger" icon="delete-forever" />
 						</b-tooltip>
 					</a>
 				</b-table-column>
+
             </template>
 			
 			<template slot="empty">
