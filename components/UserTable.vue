@@ -1,26 +1,40 @@
 <template>
     <div class="section">
-		<p class="title is-5">Filter Users:</p>
-		<div class="block">
-			<b-radio v-model="userListing" native-value="all" type="is-success">
-				Everyone
-			</b-radio>
-			<b-radio v-model="userListing" native-value="admin" type="is-danger">
-				Admin
-			</b-radio>
-			<b-radio v-model="userListing" native-value="teacher" type="is-warning">
-				Teacher
-			</b-radio>
-			<b-radio v-model="userListing" native-value="student" type="is-info">
-				Student
-			</b-radio>
+		<hr>
+		<div class="columns">
+			<div class="column">
+				<p class="title is-5">Filter Users</p>
+				<div class="block">
+					<b-radio v-model="userListing" native-value="all" type="is-success">
+						Everyone
+					</b-radio>
+					<b-radio v-model="userListing" native-value="admin" type="is-danger">
+						Admin
+					</b-radio>
+					<b-radio v-model="userListing" native-value="teacher" type="is-warning">
+						Teacher
+					</b-radio>
+					<b-radio v-model="userListing" native-value="student" type="is-info">
+						Student
+					</b-radio>
+				</div>
+			</div>
+			<div class="column is-3" align="right">
+				<p class="title is-5">Search</p>
+				<b-field>
+					<b-input icon="magnify" placeholder="Search..." v-model="search" />
+				</b-field>
+			</div>
 		</div>
+		<hr>
+		
 
         <b-table
             :data="tableUsers"
             :loading="loading"
             paginated
 			hoverable
+			striped
             per-page=10
 			show-detail-icon
 			default-sort="name"
@@ -129,25 +143,30 @@
 							<br>
 
 							<h1 class="title is-3">Permissions</h1>
-							<div class="block">
-								<b-radio v-model="userSelection" native-value="admin" type="is-danger" :disabled="customPermissions">
-									Admin
-								</b-radio>
-								<b-radio v-model="userSelection" native-value="teacher" type="is-warning" :disabled="customPermissions">
-									Teacher
-								</b-radio>
-								<b-radio v-model="userSelection" native-value="student" type="is-success" :disabled="customPermissions">
-									Normal User
-								</b-radio>
+							<div class="columns">
+								<div class="column">
+									<div class="block">
+										<b-radio v-model="userSelection" native-value="admin" type="is-danger" :disabled="customPermissions">
+											Admin
+										</b-radio>
+										<b-radio v-model="userSelection" native-value="teacher" type="is-warning" :disabled="customPermissions">
+											Teacher
+										</b-radio>
+										<b-radio v-model="userSelection" native-value="student" type="is-success" :disabled="customPermissions">
+											Normal User
+										</b-radio>
+									</div>
+								</div>
+								
+								<div class="column" align="right">
+									<b-checkbox v-model="customPermissions">
+										Select Custom Permissions
+									</b-checkbox>
+								</div>
 							</div>
-							<div class="field">
-								<b-checkbox v-model="customPermissions">
-									Select Custom Permissions
-								</b-checkbox>
-							</div>
-							<br>
+							<hr>
 
-							<div class="box">
+							<div>
 								<div class="field">
 									<b-checkbox v-model="user.permissions"	native-value="MANAGE_ADMINS" :disabled="userSelection!=='admin' && !customPermissions">
 										Add/Remove Admin users for the institute
@@ -195,12 +214,13 @@ export default {
 			user: {
 				username: null,
 				permissions: []
-			}
+			},
+			search: null
         }
     },
 	computed: {
 		tableUsers() {
-			return this.data.filter(user => {
+			let data = this.data.filter(user => {
 				if (this.userListing === 'all') return true;
 				
 				const userType = this.getUserType(user.permissions);
@@ -208,7 +228,11 @@ export default {
 				if (this.userListing === 'teacher' && userType !== 'teacher') return false;
 				if (this.userListing === 'student' && userType !== 'student') return false;
 				return true;
-			})
+			});
+			if (this.search !== null) {
+				data = data.filter(user => user.name.toLowerCase().includes(this.search.toLowerCase()));
+			}
+			return data;
 		}
 	},
     methods: {
