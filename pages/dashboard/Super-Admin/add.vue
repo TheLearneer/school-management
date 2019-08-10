@@ -71,7 +71,7 @@ export default {
 			const result = await this.$validator.validateAll();
 			// Not registering the user if form is not valid...
 			if (!result) {
-				return this.$toast.open({
+				return this.$buefy.toast.open({
 					message: 'Please fill the registration form properly',
 					type: 'is-danger'
 				});
@@ -85,7 +85,7 @@ export default {
 					admin: this.admin.id
 				});
 			} catch(err) {
-				return this.$toast.open({
+				return this.$buefy.toast.open({
 					message: err.response.data ? err.response.data : 'There is some error, Please try again later!',
 					type: 'is-danger'
 				});

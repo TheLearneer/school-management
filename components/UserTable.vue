@@ -257,7 +257,7 @@ export default {
 				this.data = [];
 				this.loading = false;
 				// Exiting with error
-				return this.$toast.open({
+				return this.$buefy.toast.open({
 					message: err.response.data,
 					type: 'is-danger'
 				});
@@ -270,7 +270,7 @@ export default {
 			return true;
 		},
 		removeUser(id, name) {
-			this.$dialog.confirm({
+			this.$buefy.dialog.confirm({
 				title: 'Remove user ??',
 				message: `Are you sure you want to <i>remove</i> <b>${name}</b> from the institute? This action cannot be undone.`,
 				type: 'is-danger',
@@ -279,9 +279,9 @@ export default {
 					try {
 						await this.$axios.post('/api/institutes/users/delete', { id, instituteId: this.$route.query.id });
 						this.data = this.data.filter(_user => _user.id !== id);
-						return this.$toast.open({ message: `Successfully removed ${name} from the institute.`, type: 'is-success' });
+						return this.$buefy.toast.open({ message: `Successfully removed ${name} from the institute.`, type: 'is-success' });
 					} catch(err) {
-						return this.$toast.open({ message: err.response.data, type: 'is-danger' });
+						return this.$buefy.toast.open({ message: err.response.data, type: 'is-danger' });
 					}
 				}
 			});
@@ -289,7 +289,7 @@ export default {
 		async addInstituteUser() {
 			const result = await this.$validator.validateAll();
 			if (!result) {
-				return this.$toast.open({
+				return this.$buefy.toast.open({
 					message: 'Please fill the registration form properly!',
 					type: 'is-danger'
 				});
@@ -301,8 +301,8 @@ export default {
 				this.closeModal();
 				await this.loadAsyncData();
 			} catch(err) {
-				if (err.response) return this.$toast.open({ message: err.response.data, type: 'is-danger' });
-				this.$toast.open({message: err})
+				if (err.response) return this.$buefy.toast.open({ message: err.response.data, type: 'is-danger' });
+				this.$buefy.toast.open({message: err})
 			}
 		},
 		closeModal() {

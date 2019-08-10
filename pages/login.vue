@@ -34,7 +34,7 @@ export default {
 		async login() {
 			// Not registering the user if form is not valid...
 			if (this.username === null || this.password === null) {
-				return this.$toast.open({
+				return this.$buefy.toast.open({
 					message: 'Please provide the credentials!',
 					type: 'is-danger'
 				});
@@ -47,7 +47,7 @@ export default {
 				// Redirecting to next page after successful login...
 				this.$router.push(nextRoute);
 			} catch(err) {
-				this.$toast.open({
+				this.$buefy.toast.open({
 					message: err.response.data,
 					type: 'is-danger'
 				});

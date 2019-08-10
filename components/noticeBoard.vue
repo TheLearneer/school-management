@@ -70,7 +70,7 @@ export default {
 			} catch(err) {
 				this.notices = [];
 				// Exiting with error
-				return this.$toast.open({
+				return this.$buefy.toast.open({
 					message: err.response ? err.response.data : err.message,
 					type: 'is-danger'
 				});
@@ -88,7 +88,7 @@ export default {
 				// Load the user's data again...
 				await this.loadAsyncData();
 			} catch(err) {
-				return this.$toast.open( err.response ? { message: err.response.data, type: 'is-danger' } : { message: err });
+				return this.$buefy.toast.open( err.response ? { message: err.response.data, type: 'is-danger' } : { message: err });
 			}
 		},
 		closeModal() {
