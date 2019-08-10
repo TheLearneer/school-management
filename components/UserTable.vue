@@ -35,6 +35,7 @@
             paginated
 			hoverable
 			striped
+			narrowed
             per-page=10
 			show-detail-icon
 			default-sort="name"
@@ -45,7 +46,7 @@
 
             <template slot-scope="props">
 
-                <b-table-column field="name" label="Name" icon="human-male" sortable>
+                <b-table-column field="name" label="Name" sortable>
 					<template slot="header" slot-scope="{ column }">
 						<b-icon icon="account" size="is-small" /> {{ column.label }}
 					</template>
@@ -120,11 +121,16 @@
             </template>
 			
 			<template slot="footer">
-                <div>
-					<button class="button is-info" @click="isComponentModalActive = true">
-						Add new user
-					</button>
-                </div>
+				<div class="columns">
+					<div class="column">
+						<u>User Count:</u> <b>{{ this.tableUsers.length }}</b>
+					</div>
+					<div class="column" align="right">
+						<button class="button is-info" @click="isComponentModalActive = true">
+							Add new user
+						</button>
+					</div>
+				</div>
             </template>		
         </b-table>
 
