@@ -3,6 +3,7 @@
 	  <div>
 		<p>Made with <b-icon icon="heart" style="color:pink;" size="is-small" /> using <b-icon icon="vuejs" style="color:green;" size="is-small" /> and Bulma.io</p>
 	  </div>
+	  <!--
 	  <br>
 	  <div class="columns">
 		<div class="column is-half">
@@ -18,6 +19,7 @@
 			Other stuffs here...
 		</div>
 	  </div>
+	  -->
 	</footer>
 </template>
 

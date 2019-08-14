@@ -3,7 +3,10 @@
     <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <nuxt-link class="navbar-item" to="/">
-          <img src="~assets/buefy.png" alt="Santosh Bhandari" />
+			<!--
+			<img src="~assets/buefy.png" alt="Santosh Bhandari" />
+			-->
+			Home
         </nuxt-link>
 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navMenu">

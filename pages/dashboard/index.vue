@@ -7,7 +7,7 @@
 		-->
 
 		<p>
-			Select the dashboard page you want to continue into!
+			Select the Institute you want to continue into!
 		</p>
 		<br>
 		<div class="box" v-for="perm in $auth.user.permissions">
@@ -17,14 +17,11 @@
 				</div>
 				<div class="column">
 					<n-link :to="getDashURL(perm.instituteId)">
-						Institute {{ perm.instituteId }}
+						{{ perm.instituteId ? `Institute ${perm.instituteId}` : 'Site Admin Page' }}
 					</n-link>
 				</div>
-				<div class="column">
-					Role :- No idea :P
-				</div>
-				<div class="column is-1">
-					{{ perm.permissions }}
+				<div class="column is-2">
+					Role: {{ getUserType(perm.permissions).toUpperCase() }}
 				</div>
 			</div>
 		</div>
@@ -32,11 +29,21 @@
 </template>
 
 <script>
+import permissionHandler from '~/utility/permissionHandler';
+
 export default {
 	middleware: 'authentication',
 	methods: {
 		getDashURL(id) {
 			return id ? { path: '/dashboard/institute', query: { id } } : { path: '/dashboard/super-admin' }
+		},
+		getUserType(permissions) {
+			const adminPerms = ['ADMINISTRATOR', 'MANAGE_ADMINS', 'MANAGE_INSTITUTE_USERS', 'MANAGE_NOTICE'];
+			const teacherPerms = ['MANAGE_ASSIGNMENTS'];
+
+			const userPerms = permissionHandler.available(permissions);
+
+			return adminPerms.some(ap => userPerms.includes(ap)) ? 'admin' : teacherPerms.some(tp => userPerms.includes(tp)) ? 'teacher' : 'student';
 		}
 	}
 }

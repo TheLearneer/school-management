@@ -9,16 +9,18 @@
 		<h1 class="title is-2">Institutes Listed</h1>
 		<div class="box" v-for="ins of institutes" :key="ins.id">
 			<div class="columns">
-				<!--
 				<div class="column is-1">
 					<figure class="image is-64x64">
+						<!--
 						<img :src="ins.logo" />
+						-->
+						<img src="https://via.placeholder.com/64.png" />
 					</figure>
 				</div>
 				<div class="column">
-					{{ ins.name }}
+					<span>{{ ins.name }}</span>
+					<span>{{ ins.address }}</span>
 				</div>
-				-->
 				<div class="column">
 					{{ ins }}
 				</div>
